@@ -1,18 +1,17 @@
 package com.castaneda.concentrese;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Parejas extends JFrame implements ActionListener
-{
+public class Parejas extends JFrame implements ActionListener {
     private Tablero t;
     private JButton[][] botones;
     private ImageIcon[] imagenes;
     private static int sw;
     private static int a, b, ii, jj;
 
-    public Parejas()
-    {
+    public Parejas() {
         sw = 0;
         t = new Tablero(6);
         t.genAleatorio();
@@ -20,56 +19,52 @@ public class Parejas extends JFrame implements ActionListener
         configVentana();
     }
 
-    public void configVentana()
-    {
-        setTitle("Juego concentrese castñeda");
+    public void configVentana() {
+        setTitle("¡Voltea y Juega!");
         setSize(380, 380);
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
-    public void initComponents()
-    {
+
+    public void initComponents() {
         int d = t.getDim();
-        imagenes = new ImageIcon[d*d/2+1];
+        imagenes = new ImageIcon[d * d / 2 + 1];
         imagenes[0] = null;
-        for (int i = 1; i <= d*d/2; i++)
+        for (int i = 1; i <= d * d / 2; i++)
             imagenes[i] = new ImageIcon(getClass().getResource("./" + i + ".bmp"));
-        JPanel A = new JPanel(new GridLayout(d,d));
+        JPanel A = new JPanel(new GridLayout(d, d));
         botones = new JButton[d][d];
-        for (int i = 0; i < d; i++)
-        {
-            for (int j = 0; j < d; j++)
-            {
+        for (int i = 0; i < d; i++) {
+            for (int j = 0; j < d; j++) {
                 botones[i][j] = new JButton();
+                botones[i][j].setBackground(Color.DARK_GRAY);
+
                 botones[i][j].addActionListener(this);
                 A.add(botones[i][j]);
             }
         }
-        this.add(A,"Center");
+        this.add(A, "Center");
     }
-    public void accion(int x, int y)
-    {
-        switch (sw)
-        {
+
+    public void accion(int x, int y) {
+        switch (sw) {
             case 0:
-                if(!t.esClic(x, y))
-                {
+                if (!t.esClic(x, y)) {
                     t.clic(x, y);
-                    botones[x][y].setIcon(imagenes[t.getPos(x,y)]);
+                    botones[x][y].setIcon(imagenes[t.getPos(x, y)]);
                     sw = 1;
                     a = x;
                     b = y;
                 }
                 break;
             case 1:
-                if(!t.esClic(x, y))
-                {
+                if (!t.esClic(x, y)) {
                     t.clic(x, y);
-                    botones[x][y].setIcon(imagenes[t.getPos(x,y)]);
+                    botones[x][y].setIcon(imagenes[t.getPos(x, y)]);
                     ii = x;
                     jj = y;
-                    if(t.getPos(a, b) != t.getPos(ii, jj))
+                    if (t.getPos(a, b) != t.getPos(ii, jj))
                         sw = 2;
                     else
                         sw = 0;
@@ -84,19 +79,16 @@ public class Parejas extends JFrame implements ActionListener
                 break;
         }
     }
-    public void actionPerformed(ActionEvent ae)
-    {
+
+    public void actionPerformed(ActionEvent ae) {
         int d = t.getDim();
-        for (int i = 0; i < d; i++)
-        {
-            for (int j = 0; j < d; j++)
-            {
-                if(botones[i][j] == ae.getSource())
-                {
-                    accion(i,j);
-                    if(t.esCompleto())
-                    {
-                        JOptionPane.showMessageDialog(this,"Felicidades", "Al fin terminaste!",JOptionPane.INFORMATION_MESSAGE, null);
+        for (int i = 0; i < d; i++) {
+            for (int j = 0; j < d; j++) {
+                if (botones[i][j] == ae.getSource()) {
+                    accion(i, j);
+                    if (t.esCompleto()) {
+                        JOptionPane.showMessageDialog(this, "Felicidades", "¡has ganado!",
+                                JOptionPane.INFORMATION_MESSAGE, null);
                         System.exit(0);
                     }
                     return;
